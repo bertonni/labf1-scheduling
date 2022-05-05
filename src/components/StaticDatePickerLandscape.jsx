@@ -15,7 +15,7 @@ import { useSchedule } from "../contexts/ScheduleContext";
 export default function StaticDatePickerLandscape() {
   const [value, setValue] = useState(new Date());
   const [startTime, setStartTime] = useState("");
-  const [selectedLab, setSelectedLab] = useState("LAB-F1");
+  const [selectedLab] = useState("LAB-F1");
   const [endTime, setEndTime] = useState("");
   const [minDate, setMinDate] = useState(Temporal.Now.plainDateISO().add({ days: 2 }));
   const [maxDate] = useState(Temporal.Now.plainDateISO().add({ days: 14 }));

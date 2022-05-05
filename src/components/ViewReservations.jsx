@@ -25,10 +25,11 @@ const variants = {
 };
 
 export default function ViewReservations() {
-  const { schedules } = useSchedule();
+  const { schedules, schedulesCount } = useSchedule();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [reservations, setReservations] = useState([]);
+
   const theme = useTheme();
 
   const smallScreen = (useMediaQuery(theme.breakpoints.down('sm')));
@@ -44,11 +45,6 @@ export default function ViewReservations() {
     return `${day}/${month}/${year}`;
   };
 
-  const getLab = (selected) => {
-    const lab = `LAB-${selected <= 4 ? 'G' + selected : 'F' + (selected - 4)}`
-    return lab;
-  }
-
   useEffect(() => {
     const formattedDate = Temporal.PlainDate.from({
       year: selectedDate.getFullYear(),
@@ -56,10 +52,9 @@ export default function ViewReservations() {
       day: selectedDate.getDate(),
     }).toString();
 
-    setReservations(
-      schedules.filter((schedule) => schedule.date === formattedDate)
-    );
-  }, [selectedDate, schedules]);
+    const updatedData = schedules.filter((sched) => sched.date === formattedDate)
+    setReservations(updatedData);
+  }, [selectedDate, schedulesCount]);
 
 
   const AnimatedChip = motion(Chip);
@@ -78,10 +73,6 @@ export default function ViewReservations() {
         }}
       />
     );
-  };
-
-  const handleSelectedTab = (newValue) => {
-    setSelectedTab(newValue);
   };
 
   return (

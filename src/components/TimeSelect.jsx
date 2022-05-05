@@ -12,7 +12,7 @@ export default function TimeSelect({
   endTime,
   setEndTime,
 }) {
-  const { schedules } = useSchedule();
+  const { schedules, schedulesCount } = useSchedule();
   const [unavailableStartTimes, setUnavailableStartTimes] = useState([]);
   const [unavailableEndTimes, setUnavailableEndTimes] = useState([]);
   const [startTimes, setStartTimes] = useState([]);
@@ -22,8 +22,8 @@ export default function TimeSelect({
     setEndTime("");
   }, [date]);
 
-  useEffect(() => {
-    const data = schedules.filter((value) => value.date === date);
+  useEffect(async () => {
+    const data = await schedules.filter((value) => value.date === date);
     const unavailableStart = [];
     const unavailableEnd = [];
     const startValues = [];
@@ -58,7 +58,7 @@ export default function TimeSelect({
       }
     }
     setUnavailableEndTimes(unavailableEnd);
-  }, [date, startTime, endTime, lab, schedules]);
+  }, [date, startTime, endTime, lab, schedulesCount]);
 
   return (
     <Box

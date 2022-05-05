@@ -32,7 +32,7 @@ function App() {
           mb={2}
           variant={smallScreen ? "h5" : "h4"}
         >
-          Agendamento do Laboratório
+          Reserva - Laboratório F1
         </Typography>
         <Typography
           textAlign={"center"}
@@ -40,8 +40,7 @@ function App() {
           mt={4}
           variant={smallScreen ? "h7" : "h6"}
         >
-          Você precisa fazer o login com o e-mail institucional para fazer um
-          agendamento
+          Você precisa fazer o login com o e-mail institucional para fazer uma reserva
         </Typography>
         <Button
           onClick={login}
@@ -83,7 +82,7 @@ function App() {
         mb={3}
         variant={smallScreen ? "h4" : "h3"}
       >
-        Agendamento Laboratório F1
+        Reserva - Laboratório F1
       </Typography>
       <Box
         sx={{

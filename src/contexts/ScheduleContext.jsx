@@ -2,7 +2,6 @@ import {
   collection,
   doc,
   setDoc,
-  getDocs,
   deleteDoc,
   onSnapshot,
   query,
@@ -25,33 +24,25 @@ export function ScheduleProvider({ children }) {
 
   const { user } = useAuth();
 
-  const getDataFromFirebase = async (arr, lab) => {
-    const querySnapshot = await getDocs(collection(db, lab));
-    querySnapshot.forEach((doc) => {
-      arr.push(doc.data());
-    });
-  };
-
   useEffect(async () => {
+    if (user) {
+      const data = [];
 
-    if (!user) return;
-
-    const data = [];
-
-    const q = query(collection(db, "LAB-F1"), where("lab", "==", "LAB-F1"));
-    const unsubscribe = await onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data());
+      const q = query(collection(db, "LAB-F1"), where("lab", "==", "LAB-F1"));
+      const unsubscribe = await onSnapshot(q, (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
       });
-    });
 
-    setSchedules(data);
-    console.log("data updated");
+      await setSchedules(data);
+      console.log("data updated");
 
-    return () => {
-      unsubscribe();
-      console.log('unsubscribed');
-    };
+      return () => {
+        unsubscribe();
+        console.log("unsubscribed");
+      };
+    }
   }, [schedulesCount]);
 
   const makeReservation = async (reservation) => {

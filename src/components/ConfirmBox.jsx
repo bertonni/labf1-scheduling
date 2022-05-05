@@ -16,7 +16,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function ConfirmBox({ open, close, schedule, confirm }) {
+export default function ConfirmBox({ open, close, confirm, schedule }) {
   const { removeReservation, error, setError } = useSchedule();
 
   if (Object.keys(schedule).length === 0) return null;
@@ -26,9 +26,10 @@ export default function ConfirmBox({ open, close, schedule, confirm }) {
     close();
   };
 
-  const handleConfirm = async () => {
-    await removeReservation(schedule);
-    if (error !== "") confirm(true);
+  const handleConfirm = () => {
+    removeReservation(schedule);
+    // if (error !== "")
+    confirm(true);
     close();
   };
 

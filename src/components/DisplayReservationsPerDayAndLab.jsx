@@ -22,14 +22,22 @@ export default function DisplayReservationsPerDayAndLab({
   const [confirmation, setConfirmation] = useState(false);
 
   const { user } = useAuth();
-  const { schedulesCount, schedules } = useSchedule();
+  const { schedulesCount, error } = useSchedule();
 
   useEffect(() => {
+    setConfirmation(false);
     const filtered = reservations.filter(
       (schedule) => schedule.date === date
     );
     setSchedulesForSelectedLab(filtered);
-  }, [date, schedules, schedulesCount, confirmation, reservations]);
+  }, [date, reservations, schedulesCount]);
+
+  useEffect(() => {
+    if (error.length === 0) {
+      const updated = schedulesForSelectedLab.filter((schedule) => JSON.stringify(schedule) !== JSON.stringify(selectedSchedule));
+      setSchedulesForSelectedLab(updated);
+    }
+  }, [confirmation]);
 
   const removeSchedule = (sched) => {
     setSelectedSchedule(sched);
@@ -141,7 +149,6 @@ export default function DisplayReservationsPerDayAndLab({
           </Grid>
         );
       })}
-      {/* <Pagination count={3} variant="outlined" shape="rounded" /> */}
     </Box>
   );
 }
