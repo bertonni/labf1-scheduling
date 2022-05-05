@@ -20,10 +20,10 @@ export default function TimeSelect({
   useEffect(() => {
     setStartTime("");
     setEndTime("");
-  }, [date, lab]);
+  }, []);
 
   useEffect(() => {
-    const data = schedules.filter((value) => value.date === date && lab === value.lab);
+    const data = schedules.filter((value) => value.date === date);
     const unavailableStart = [];
     const unavailableEnd = [];
     const startValues = [];
@@ -58,7 +58,7 @@ export default function TimeSelect({
       }
     }
     setUnavailableEndTimes(unavailableEnd);
-  }, [date, startTime, endTime, lab]);
+  }, [date, startTime, endTime, lab, schedules]);
 
   return (
     <Box

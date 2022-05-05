@@ -15,16 +15,14 @@ import { useSchedule } from "../contexts/ScheduleContext";
 export default function StaticDatePickerLandscape() {
   const [value, setValue] = useState(new Date());
   const [startTime, setStartTime] = useState("");
-  const [selectedLab, setSelectedLab] = useState("");
+  const [selectedLab, setSelectedLab] = useState("LAB-F1");
   const [endTime, setEndTime] = useState("");
-  // const [unavailableDates, setUnavailableDates] = useState([]);
-  const [minDate, setMinDate] = useState(Temporal.Now.plainDateISO());
+  const [minDate, setMinDate] = useState(Temporal.Now.plainDateISO().add({ days: 2 }));
   const [maxDate] = useState(Temporal.Now.plainDateISO().add({ days: 14 }));
-  const [selectLabError, setSelectLabError] = useState(false);
   const [open, setOpen] = useState(false);
 
   const { user } = useAuth();
-  const { addReservation, error } = useSchedule();
+  const { makeReservation } = useSchedule();
 
   const [scheduling, setScheduling] = useState({
     user: {
@@ -37,13 +35,6 @@ export default function StaticDatePickerLandscape() {
     start: "",
     end: "",
   });
-
-  useEffect(() => {
-    if (selectedLab === "") {
-      setStartTime("");
-      setEndTime("");
-    }
-  }, [selectedLab]);
 
   const handleClose = () => {
     setOpen(false);
@@ -76,11 +67,9 @@ export default function StaticDatePickerLandscape() {
 
     setScheduling(scheduling);
 
-    addReservation(scheduling);
+    makeReservation(scheduling);
     setStartTime("");
     setEndTime("");
-    setSelectedLab("");
-    // setUnavailableDates([...unavailableDates, getFormattedDate(value)])
   };
 
   const renderWeekPickerDay = (date, selectedDates, pickersDayProps) => {
@@ -115,12 +104,7 @@ export default function StaticDatePickerLandscape() {
         alignItems: "center",
       }}
     >
-      <LabSelect
-        selectedLab={selectedLab}
-        setSelectedLab={setSelectedLab}
-        error={selectLabError}
-        setError={setSelectLabError}
-      />
+      <LabSelect />
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={brLocale}>
         <Box
           minHeight={300}

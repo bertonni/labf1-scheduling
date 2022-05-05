@@ -32,7 +32,7 @@ function App() {
           mb={2}
           variant={smallScreen ? "h5" : "h4"}
         >
-          Agendamento de Laboratório
+          Agendamento do Laboratório
         </Typography>
         <Typography
           textAlign={"center"}
@@ -62,13 +62,28 @@ function App() {
       height={"100vh"}
       sx={{ px: { xs: "2rem", sm: "3rem", lg: "6rem" } }}
     >
+      {user && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center', width: '100%', mt: 2}}>
+          <Typography>
+           Olá, <b>{user.email}</b>
+          </Typography>
+          <Button
+            variant="contained"
+            color="error"
+            size={"small"}
+            onClick={logout}
+          >
+            Sair
+          </Button>
+        </Box>
+      )}
       <Typography
         textAlign={"center"}
-        mt={4}
+        mt={2}
         mb={2}
         variant={smallScreen ? "h5" : "h4"}
       >
-        Agendamento de Laboratório
+        Agendamento do Laboratório F1
       </Typography>
       <Box
         sx={{
@@ -107,17 +122,6 @@ function App() {
           </Button>
         </ButtonGroup>
       </Box>
-      {user && (
-        <Button
-          variant="contained"
-          color="error"
-          size={smallScreen ? "small" : "medium"}
-          onClick={logout}
-          sx={{ position: "absolute", top: 4, right: 20 }}
-        >
-          Sair
-        </Button>
-      )}
       {selectedTab === 1 ? <StaticDatePickerLandscape /> : <ViewReservations />}
     </Box>
   );

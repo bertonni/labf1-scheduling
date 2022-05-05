@@ -23,24 +23,21 @@ export default function DisplayReservationsPerDayAndLab({
 
   const { user } = useAuth();
 
-  useEffect(() => {
-    const schedulesForDate = reservations.filter(
-      (reserve) => reserve.lab === lab && reserve.date === date
-      );
-    
-    schedulesForDate.sort((a, b) => a.start - b.start);
-    setSchedulesForSelectedLab(schedulesForDate);
-  }, [date, lab, reservations]);
+  // useEffect(() => {
+  //   const schedulesForDate = reservations.filter(
+  //     (reserve) => reserve.lab === lab && reserve.date === date
+  //     );
+
+  //   schedulesForDate.sort((a, b) => a.start - b.start);
+  //   setSchedulesForSelectedLab(schedulesForDate);
+  // }, [date, lab, reservations]);
 
   useEffect(() => {
-    if (confirmation) {
-      const filtered = schedulesForSelectedLab.filter(
-        (schedul) =>
-          JSON.stringify(schedul) !== JSON.stringify(selectedSchedule)
-      );
-      setSchedulesForSelectedLab(filtered);
-    }
-  }, [confirmation]);
+    const filtered = reservations.filter(
+      (schedule) => schedule.date === date
+    );
+    setSchedulesForSelectedLab(filtered);
+  }, [reservations, confirmation]);
 
   const removeSchedule = (sched) => {
     setSelectedSchedule(sched);

@@ -6,7 +6,6 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { db } from "../utils/firebase";
 import { useAuth } from "./AuthContext";
 
@@ -18,7 +17,8 @@ export const useSchedule = () => {
 
 export function ScheduleProvider({ children }) {
   const { user } = useAuth();
-  const [schedules, setSchedules] = useLocalStorage("schedules", []);
+  const [schedules, setSchedules] = useState([]);
+  const [schedulesCount, setSchedulesCount] = useState(0);
   const [error, setError] = useState("");
 
   const getDataFromFirebase = async (arr, lab) => {
@@ -32,22 +32,16 @@ export function ScheduleProvider({ children }) {
     if (user) {
       const data = [];
       try {
-        await getDataFromFirebase(data, "LAB-G1");
-        await getDataFromFirebase(data, "LAB-G2");
-        await getDataFromFirebase(data, "LAB-G3");
-        await getDataFromFirebase(data, "LAB-G4");
         await getDataFromFirebase(data, "LAB-F1");
-        await getDataFromFirebase(data, "LAB-F2");
-        await getDataFromFirebase(data, "LAB-F3");
-        await getDataFromFirebase(data, "LAB-F4");
       } catch (error) {
         console.log(error);
       }
       setSchedules(data);
+      console.log('data updated');
     }
-  }, []);
+  }, [schedulesCount]);
 
-  const addReservation = async (reservation) => {
+  const makeReservation = async (reservation) => {
     try {
       await setDoc(
         doc(
@@ -59,7 +53,7 @@ export function ScheduleProvider({ children }) {
         ),
         reservation
       );
-      setSchedules([...schedules, reservation]);
+      setSchedulesCount(schedulesCount + 1);
     } catch (e) {
       setError(e);
     }
@@ -80,7 +74,7 @@ export function ScheduleProvider({ children }) {
       }
     });
 
-    if (errorMessage === "") setSchedules(updatedSchedules);
+    if (errorMessage === "") setSchedulesCount(schedulesCount - 1);
     setError(errorMessage);
   };
 
@@ -90,9 +84,9 @@ export function ScheduleProvider({ children }) {
       error,
       setError,
       removeReservation,
-      addReservation,
+      makeReservation,
     }),
-    [schedules, error]
+    [schedules, schedulesCount, error]
   );
 
   return (
