@@ -4,6 +4,9 @@ import {
   setDoc,
   getDocs,
   deleteDoc,
+  onSnapshot,
+  query,
+  where,
 } from "firebase/firestore";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { db } from "../utils/firebase";
@@ -16,10 +19,11 @@ export const useSchedule = () => {
 };
 
 export function ScheduleProvider({ children }) {
-  const { user } = useAuth();
   const [schedules, setSchedules] = useState([]);
   const [schedulesCount, setSchedulesCount] = useState(0);
   const [error, setError] = useState("");
+
+  const { user } = useAuth();
 
   const getDataFromFirebase = async (arr, lab) => {
     const querySnapshot = await getDocs(collection(db, lab));
@@ -29,16 +33,25 @@ export function ScheduleProvider({ children }) {
   };
 
   useEffect(async () => {
-    if (user) {
-      const data = [];
-      try {
-        await getDataFromFirebase(data, "LAB-F1");
-      } catch (error) {
-        console.log(error);
-      }
-      setSchedules(data);
-      console.log('data updated');
-    }
+
+    if (!user) return;
+
+    const data = [];
+
+    const q = query(collection(db, "LAB-F1"), where("lab", "==", "LAB-F1"));
+    const unsubscribe = await onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+    });
+
+    setSchedules(data);
+    console.log("data updated");
+
+    return () => {
+      unsubscribe();
+      console.log('unsubscribed');
+    };
   }, [schedulesCount]);
 
   const makeReservation = async (reservation) => {
@@ -60,19 +73,21 @@ export function ScheduleProvider({ children }) {
   };
 
   const removeReservation = async (schedule) => {
-    let updatedSchedules = [];
     let errorMessage = "";
-    const id = `${schedule.date}-${schedule.start < 10 ? "0" + schedule.start : schedule.start}`
+    const id = `${schedule.date}-${
+      schedule.start < 10 ? "0" + schedule.start : schedule.start
+    }`;
 
-    await deleteDoc(doc(db, schedule.lab, id)).then((res) => {
-      updatedSchedules = schedules.filter(
-        (sched) => JSON.stringify(sched) !== JSON.stringify(schedule)
-      );
-    }).catch((err) => {
-      if (err) {
-        errorMessage = "Houve um erro ao executar a ação. Tente novamente mais tarde";
-      }
-    });
+    await deleteDoc(doc(db, schedule.lab, id))
+      .then((res) => {
+        errorMessage = "";
+      })
+      .catch((err) => {
+        if (err) {
+          errorMessage =
+            "Houve um erro ao executar a ação. Tente novamente mais tarde";
+        }
+      });
 
     if (errorMessage === "") setSchedulesCount(schedulesCount - 1);
     setError(errorMessage);
@@ -82,6 +97,7 @@ export function ScheduleProvider({ children }) {
     () => ({
       schedules,
       error,
+      schedulesCount,
       setError,
       removeReservation,
       makeReservation,

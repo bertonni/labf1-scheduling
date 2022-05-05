@@ -79,11 +79,11 @@ function App() {
       )}
       <Typography
         textAlign={"center"}
-        mt={2}
-        mb={2}
-        variant={smallScreen ? "h5" : "h4"}
+        mt={3}
+        mb={3}
+        variant={smallScreen ? "h4" : "h3"}
       >
-        Agendamento do Laboratório F1
+        Agendamento Laboratório F1
       </Typography>
       <Box
         sx={{

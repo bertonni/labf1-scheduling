@@ -10,11 +10,11 @@ import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAuth } from "../contexts/AuthContext";
 import ConfirmBox from "./ConfirmBox";
+import { useSchedule } from "../contexts/ScheduleContext";
 
 export default function DisplayReservationsPerDayAndLab({
   reservations,
   date,
-  lab,
 }) {
   const [schedulesForSelectedLab, setSchedulesForSelectedLab] = useState([]);
   const [showConfirmBox, setShowConfirmBox] = useState(false);
@@ -22,22 +22,14 @@ export default function DisplayReservationsPerDayAndLab({
   const [confirmation, setConfirmation] = useState(false);
 
   const { user } = useAuth();
-
-  // useEffect(() => {
-  //   const schedulesForDate = reservations.filter(
-  //     (reserve) => reserve.lab === lab && reserve.date === date
-  //     );
-
-  //   schedulesForDate.sort((a, b) => a.start - b.start);
-  //   setSchedulesForSelectedLab(schedulesForDate);
-  // }, [date, lab, reservations]);
+  const { schedulesCount, schedules } = useSchedule();
 
   useEffect(() => {
     const filtered = reservations.filter(
       (schedule) => schedule.date === date
     );
     setSchedulesForSelectedLab(filtered);
-  }, [reservations, confirmation]);
+  }, [date, schedules, schedulesCount, confirmation, reservations]);
 
   const removeSchedule = (sched) => {
     setSelectedSchedule(sched);

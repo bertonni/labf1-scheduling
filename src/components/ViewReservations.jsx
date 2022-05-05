@@ -148,7 +148,6 @@ export default function ViewReservations() {
           month: selectedDate.getMonth() + 1,
           day: selectedDate.getDate(),
         }).toString()}
-        lab={"LAB-F1"}
       />
     </>
   );

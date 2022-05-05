@@ -20,7 +20,7 @@ export default function TimeSelect({
   useEffect(() => {
     setStartTime("");
     setEndTime("");
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     const data = schedules.filter((value) => value.date === date);
