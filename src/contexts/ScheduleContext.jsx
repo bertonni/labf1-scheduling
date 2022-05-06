@@ -24,18 +24,18 @@ export function ScheduleProvider({ children }) {
 
   const { user } = useAuth();
 
-  useEffect(async () => {
-    if (user) {
+  useEffect(() => {
+    if (user) {                                                                                                                               
       const data = [];
 
       const q = query(collection(db, "LAB-F1"), where("lab", "==", "LAB-F1"));
-      const unsubscribe = await onSnapshot(q, (querySnapshot) => {
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
           data.push(doc.data());
         });
       });
 
-      await setSchedules(data);
+      setSchedules(data);
       console.log("data updated");
 
       return () => {

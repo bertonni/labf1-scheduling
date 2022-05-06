@@ -40,7 +40,7 @@ function App() {
           mt={4}
           variant={smallScreen ? "h7" : "h6"}
         >
-          Você precisa fazer o login com o e-mail institucional para fazer uma reserva
+          Você precisa realizar o login com o e-mail institucional para fazer uma reserva
         </Typography>
         <Button
           onClick={login}
