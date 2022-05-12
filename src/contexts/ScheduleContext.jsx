@@ -41,7 +41,7 @@ export function ScheduleProvider({ children }) {
     return () => {
       unsubscribe();
     };
-  }, [schedulesCount, user]);
+  }, []);
 
   const makeReservation = async (reservation) => {
     try {
