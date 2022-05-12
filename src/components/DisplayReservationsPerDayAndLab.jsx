@@ -22,22 +22,11 @@ export default function DisplayReservationsPerDayAndLab({
   const [confirmation, setConfirmation] = useState(false);
 
   const { user } = useAuth();
-  const { schedulesCount, error } = useSchedule();
 
   useEffect(() => {
-    setConfirmation(false);
-    const filtered = reservations.filter(
-      (schedule) => schedule.date === date
-    );
+    const filtered = reservations.filter((schedule) => schedule.date === date);
     setSchedulesForSelectedLab(filtered);
-  }, [date, reservations, schedulesCount]);
-
-  useEffect(() => {
-    if (error.length === 0) {
-      const updated = schedulesForSelectedLab.filter((schedule) => JSON.stringify(schedule) !== JSON.stringify(selectedSchedule));
-      setSchedulesForSelectedLab(updated);
-    }
-  }, [confirmation]);
+  }, [date, reservations]);
 
   const removeSchedule = (sched) => {
     setSelectedSchedule(sched);
@@ -65,7 +54,7 @@ export default function DisplayReservationsPerDayAndLab({
         confirm={setConfirmation}
         schedule={selectedSchedule}
       />
-      {schedulesForSelectedLab.length === 0 ? (
+      {reservations.length === 0 ? (
         <Typography mt={2}>Não há reservas para este dia =)</Typography>
       ) : (
         <Grid

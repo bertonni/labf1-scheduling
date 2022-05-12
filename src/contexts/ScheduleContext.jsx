@@ -25,25 +25,23 @@ export function ScheduleProvider({ children }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {                                                                                                                               
-      const data = [];
-
+    let unsubscribe = () => console.log('unsubscribed');
+    if (user) {
       const q = query(collection(db, "LAB-F1"), where("lab", "==", "LAB-F1"));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+
+      unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const data = [];
         querySnapshot.forEach((doc) => {
           data.push(doc.data());
         });
+        setSchedules(data);
       });
 
-      setSchedules(data);
-      console.log("data updated");
-
-      return () => {
-        unsubscribe();
-        console.log("unsubscribed");
-      };
     }
-  }, [schedulesCount]);
+    return () => {
+      unsubscribe();
+    };
+  }, [schedulesCount, user]);
 
   const makeReservation = async (reservation) => {
     try {
@@ -84,6 +82,11 @@ export function ScheduleProvider({ children }) {
     setError(errorMessage);
   };
 
+  const getUpdatedData = (date) => {
+    const arr = schedules.filter((schedule) => schedule.date === date);
+    return arr;
+  };
+
   const memoedValues = useMemo(
     () => ({
       schedules,
@@ -92,6 +95,7 @@ export function ScheduleProvider({ children }) {
       setError,
       removeReservation,
       makeReservation,
+      getUpdatedData,
     }),
     [schedules, schedulesCount, error]
   );

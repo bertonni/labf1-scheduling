@@ -28,7 +28,6 @@ export default function ConfirmBox({ open, close, confirm, schedule }) {
 
   const handleConfirm = () => {
     removeReservation(schedule);
-    // if (error !== "")
     confirm(true);
     close();
   };
