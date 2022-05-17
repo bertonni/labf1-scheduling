@@ -7,7 +7,6 @@ import StaticDatePicker from "@mui/lab/StaticDatePicker";
 import { Box, Button, Snackbar, Alert, Typography } from "@mui/material";
 import { Temporal } from "@js-temporal/polyfill";
 import TimeSelect from "./TimeSelect";
-// import LabSelect from "./LabSelect";
 import { PickersDay, pickersDayClasses } from "@mui/lab";
 import { useAuth } from "../contexts/AuthContext";
 import { useSchedule } from "../contexts/ScheduleContext";
@@ -77,6 +76,9 @@ export default function StaticDatePickerLandscape() {
       <PickersDay
         {...pickersDayProps}
         sx={{
+          [`&&.${pickersDayClasses.root}`]: {
+            backgroundColor: 'transparent'
+          },
           [`&&.${pickersDayClasses.selected}`]: {
             backgroundColor: "#349A46",
           },
