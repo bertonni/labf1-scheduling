@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useAuth } from "../contexts/AuthContext";
 import ConfirmBox from "./ConfirmBox";
-import { useSchedule } from "../contexts/ScheduleContext";
+// import { useSchedule } from "../contexts/ScheduleContext";
 
 export default function DisplayReservationsPerDayAndLab({
   reservations,
