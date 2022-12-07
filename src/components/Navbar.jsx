@@ -46,7 +46,7 @@ export default function Navbar() {
           width: "100%",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Link
             underline="none"
             variant="button"
@@ -66,7 +66,7 @@ export default function Navbar() {
           >
             Reservar Sl de Atendimento
           </Link>
-        </Box>
+        </Box> */}
         {user && (
           <Tooltip title="Menu">
             <IconButton
